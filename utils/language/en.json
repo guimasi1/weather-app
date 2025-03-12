@@ -1,0 +1,10 @@
+{
+  "settings": "Settings",
+  "language": "Language",
+  "english": "English",
+  "italian": "Italian",
+  "units": "Units of measure",
+  "metric": "Metric",
+  "imperial": "Imperial",
+  "today": "Today"
+}

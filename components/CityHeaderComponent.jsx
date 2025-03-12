@@ -1,19 +1,59 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { colors } from "@/constants/colors";
-
-import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import React, { useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MyFontText from "./MyFontText";
-const CityHeaderComponent = () => {
-  const styles = createStyle(colors);
+import { t } from "@/utils/language/translate";
+import { useLanguage } from "@/contexts/LanguageContext";
 
+const CityHeaderComponent = ({ city, setCityName }) => {
+  const cityName = city?.name;
+  const countryName = city?.country;
+  const styles = createStyle(colors);
+  const { language } = useLanguage();
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const handleCityNameChange = (e) => {
+    setCityName(e.target.value);
+  };
+  const handleCityNameInputOnFocus = () => {
+    setIsInputFocused(true);
+  };
+  const handleCityNameInputOnBlur = () => {
+    setIsInputFocused(false);
+  };
   return (
     <View style={styles.headerContainer}>
       <View style={styles.currentCity}>
         <MaterialIcons name="place" size={30} color={colors.white} />
-        <MyFontText style={styles.headerText}>London, UK</MyFontText>
+        <MyFontText style={styles.headerText}>
+          {cityName}, {countryName}
+        </MyFontText>
       </View>
-      <MyFontText style={styles.currentDay}>Today, Oct 18</MyFontText>
+      <MyFontText style={styles.currentDay}>
+        {t("today", language)}, Oct 18
+      </MyFontText>
+      <View
+        style={[
+          styles.inputContainer,
+          isInputFocused && styles.containerFocused,
+        ]}
+      >
+        <FontAwesome
+          name="search"
+          size={20}
+          color={colors.white}
+          style={styles.searchIcon}
+        />
+        <TextInput
+          style={styles.cityNameInput}
+          onChange={(e) => {
+            handleCityNameChange(e);
+          }}
+          onFocus={handleCityNameInputOnFocus}
+          onBlur={handleCityNameInputOnBlur}
+        />
+      </View>
     </View>
   );
 };
@@ -30,6 +70,8 @@ const createStyle = (colors) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
+      alignSelf: "start",
+      paddingLeft: 15,
     },
     headerText: {
       fontWeight: 400,
@@ -40,6 +82,34 @@ const createStyle = (colors) =>
       alignSelf: "start",
       fontWeight: 400,
       color: colors.white,
+    },
+    cityNameInput: {
+      fontSize: 16,
+      color: "white",
+      borderWidth: 0,
+      borderColor: "transparent",
+      outlineStyle: "none",
+    },
+    searchIcon: {
+      marginRight: 10,
+    },
+    inputContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+      borderRadius: 25,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderColor: "rgba(255, 255, 255, 0.3)",
+      transition: "all 0.3s ease-in-out",
+    },
+    containerFocused: {
+      borderColor: "white",
+      backgroundColor: "rgba(255, 255, 255, 0.3)",
+      shadowColor: "#fff",
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.5,
+      shadowRadius: 10,
     },
   });
 

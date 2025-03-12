@@ -3,33 +3,52 @@ import React from "react";
 import { colors } from "@/constants/colors";
 import Feather from "@expo/vector-icons/Feather";
 import MyFontText from "./MyFontText";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Entypo from "@expo/vector-icons/Entypo";
 
-const WeatherDetailsComponent = () => {
+const WeatherDetailsComponent = ({ weatherData, pollutionData }) => {
+  const currentTemperature = weatherData?.list[0].main.temp;
+  const weatherDescription = weatherData?.list[0].weather[0].description;
+  const humidity = weatherData?.list[0].main.humidity;
+  const pressure = weatherData?.list[0].main.pressure;
+  const pm10 = pollutionData?.list[0].components.pm10;
   const styles = createStyle(colors);
   return (
     <View style={styles.weatherDetailsContainer}>
-      <MyFontText style={styles.currentDegrees}>16°</MyFontText>
+      <MyFontText style={styles.currentDegrees}>
+        {currentTemperature?.toFixed(0)}°
+      </MyFontText>
       <View style={styles.currentAndYesterdayMinMaxDegrees}>
         <View style={styles.minMaxContainer}>
-          <MyFontText style={{ color: colors.white }}>Today</MyFontText>
+          <MyFontText style={{ color: colors.white }}>
+            {weatherDescription?.charAt(0).toUpperCase() +
+              weatherDescription?.slice(1)}
+          </MyFontText>
           <View style={styles.arrowAndText}>
-            <Feather name="arrow-up" size={16} color={colors.white} />
-            <MyFontText style={{ color: colors.white }}>17°</MyFontText>
+            <MaterialCommunityIcons
+              name="cup-water"
+              size={16}
+              color={colors.white}
+            />
+            <MyFontText style={{ color: colors.white }}>
+              {humidity ? humidity : ""}
+            </MyFontText>
           </View>
           <View style={styles.arrowAndText}>
-            <Feather name="arrow-down" size={16} color={colors.white} />
-            <MyFontText style={{ color: colors.white }}>8°</MyFontText>
-          </View>{" "}
-        </View>
-        <View style={styles.minMaxContainer}>
-          <MyFontText style={{ color: colors.white }}>Yesterday</MyFontText>
+            <Entypo name="gauge" size={16} color={colors.white} />
+            <MyFontText style={{ color: colors.white }}>
+              {pressure ? pressure : ""}
+            </MyFontText>
+          </View>
           <View style={styles.arrowAndText}>
-            <Feather name="arrow-up" size={16} color={colors.white} />
-            <MyFontText style={{ color: colors.white }}>15°</MyFontText>
-          </View>{" "}
-          <View style={styles.arrowAndText}>
-            <Feather name="arrow-down" size={16} color={colors.white} />
-            <MyFontText style={{ color: colors.white }}>8°</MyFontText>
+            <MaterialCommunityIcons
+              name="smog"
+              size={16}
+              color={colors.white}
+            />
+            <MyFontText style={{ color: colors.white }}>
+              {pm10 ? pm10 : ""}
+            </MyFontText>
           </View>
         </View>
       </View>
@@ -42,8 +61,8 @@ const createStyle = (colors) =>
       alignSelf: "start",
       paddingHorizontal: 20,
       marginBottom: 200,
+      width: "100%",
     },
-
     currentAndYesterdayMinMaxDegrees: {
       flexDirection: "row",
       justifyContent: "center",
@@ -51,16 +70,11 @@ const createStyle = (colors) =>
       gap: 18,
       borderColor: colors.white,
       borderWidth: 1,
-      paddingHorizontal: 18,
-      paddingVertical: 10,
-      borderRadius: 20,
+      paddingHorizontal: 25,
+      paddingVertical: 16,
+      borderRadius: 25,
     },
 
-    verticalSeparator: {
-      borderColor: colors.white,
-      borderWidth: 1,
-      borderLeftWidth: 0,
-    },
     currentDegrees: {
       fontSize: 180,
       color: colors.white,
@@ -69,7 +83,7 @@ const createStyle = (colors) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      gap: 8,
+      gap: 20,
       flex: 1,
     },
 
