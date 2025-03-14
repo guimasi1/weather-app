@@ -3,39 +3,35 @@ import MyFontText from "@/components/MyFontText";
 import { colors } from "@/constants/colors";
 import { View, Text, StyleSheet, Switch } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
 import { globalStyles } from "@/styles/globalStyle";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { t } from "@/utils/language/translate.js";
 import { useUnits } from "@/contexts/UnitsContext";
+import { useTranslate } from "@/utils/language/translate";
 
 export default function Settings() {
   const styles = createStyle(colors);
   const { language, setLanguage } = useLanguage();
+  const t = useTranslate();
   const { units, setUnits } = useUnits();
   return (
     <View style={globalStyles.container}>
       <BackgroundComponent />
-      <MyFontText style={styles.headingTitle}>
-        {t("settings", language)}
-      </MyFontText>
+      <MyFontText style={styles.headingTitle}>{t("settings")}</MyFontText>
 
       <View style={[globalStyles.flexRow, styles.settingRow]}>
-        <MyFontText style={styles.settingName}>
-          {t("language", language)}
-        </MyFontText>
+        <MyFontText style={styles.settingName}>{t("language")}</MyFontText>
         <Picker
           style={styles.picker}
           selectedValue={language}
           onValueChange={(itemValue, itemIndex) => setLanguage(itemValue)}
         >
-          <Picker.Item label={t("english", language)} value="en" />
-          <Picker.Item label={t("italian", language)} value="it" />
+          <Picker.Item label={t("english")} value="en" />
+          <Picker.Item label={t("italian")} value="it" />
         </Picker>
       </View>
       <View style={globalStyles.flexRow}>
         <MyFontText style={styles.settingName}>
-          {units === "metric" ? t("metric", language) : t("imperial", language)}
+          {units === "metric" ? t("metric") : t("imperial")}
         </MyFontText>
         <Switch
           value={units === "metric"}

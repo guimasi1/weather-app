@@ -12,6 +12,7 @@ const WeatherDetailsComponent = ({ weatherData, pollutionData }) => {
   const humidity = weatherData?.list[0].main.humidity;
   const pressure = weatherData?.list[0].main.pressure;
   const pm10 = pollutionData?.list[0].components.pm10;
+
   const styles = createStyle(colors);
   return (
     <View style={styles.weatherDetailsContainer}>

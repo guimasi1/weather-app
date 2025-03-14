@@ -4,14 +4,15 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MyFontText from "./MyFontText";
-import { t } from "@/utils/language/translate";
+import { t, useTranslate } from "@/utils/language/translate";
 import { useLanguage } from "@/contexts/LanguageContext";
+import convertNumberToMonth from "@/utils/dates/convertNumberToMonth";
 
 const CityHeaderComponent = ({ city, setCityName }) => {
   const cityName = city?.name;
   const countryName = city?.country;
   const styles = createStyle(colors);
-  const { language } = useLanguage();
+  const t = useTranslate();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const handleCityNameChange = (e) => {
     setCityName(e.target.value);
@@ -22,6 +23,11 @@ const CityHeaderComponent = ({ city, setCityName }) => {
   const handleCityNameInputOnBlur = () => {
     setIsInputFocused(false);
   };
+  const currentDate = new Date();
+  console.log(currentDate.getFullYear());
+  const currentMonth = convertNumberToMonth(currentDate.getMonth());
+  const currentDay = currentDate.getDate();
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.currentCity}>
@@ -31,7 +37,7 @@ const CityHeaderComponent = ({ city, setCityName }) => {
         </MyFontText>
       </View>
       <MyFontText style={styles.currentDay}>
-        {t("today", language)}, Oct 18
+        {t("today")}, {t(currentMonth)} {currentDay}
       </MyFontText>
       <View
         style={[

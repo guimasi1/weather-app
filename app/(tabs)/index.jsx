@@ -4,10 +4,11 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CityHeaderComponent from "@/components/CityHeaderComponent";
 import WeatherDetailsComponent from "@/components/WeatherDetailsComponent";
 import HourlyForecastComponent from "@/components/HourlyForecastComponent";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import BackgroundComponent from "@/components/BackgroundComponent";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUnits } from "@/contexts/UnitsContext";
+import convertNumberToMonth from "@/utils/dates/convertNumberToMonth";
 
 const weatherBaseUrl = "https://api.openweathermap.org/data/2.5";
 
@@ -22,10 +23,7 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState(null);
   const [pollutionData, setPollutionData] = useState(null);
 
-  const currentDay = new Date();
-  console.log(currentDay.getDate());
-
-  const fetchCoordinates = async () => {
+  const fetchCoordinates = useCallback(async () => {
     try {
       const res = await fetch(
         `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${OPEN_WEATHER_API_KEY}`
@@ -42,9 +40,9 @@ export default function Home() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [cityName]);
 
-  const fetchWeather = async () => {
+  const fetchWeather = useCallback(async () => {
     if (coordinates) {
       const { lat, lon } = coordinates;
       try {
@@ -56,7 +54,6 @@ export default function Home() {
         if (res.ok) {
           const data = await res.json();
           setWeatherData(data);
-          console.log(data);
         } else {
           throw new Error("Something went wrong");
         }
@@ -64,9 +61,9 @@ export default function Home() {
         console.error(err);
       }
     }
-  };
+  }, [coordinates, units, language]);
 
-  const fetchPollution = async () => {
+  const fetchPollution = useCallback(async () => {
     try {
       const res = await fetch(
         `${weatherBaseUrl}/air_pollution?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${OPEN_WEATHER_API_KEY}`
@@ -75,14 +72,13 @@ export default function Home() {
       if (res.ok) {
         const data = await res.json();
         setPollutionData(data);
-        console.log(data);
       } else {
         throw new Error("Something went wrong");
       }
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [coordinates]);
 
   useEffect(() => {
     fetchCoordinates();
@@ -135,6 +131,4 @@ const createStyle = (colors) =>
       backgroundColor: colors.blue,
       paddingTop: 40,
     },
-
-    //
   });
