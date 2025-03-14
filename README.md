@@ -3,9 +3,10 @@
 A simple weather app built with **React Native** and **Expo**.
 
 ## 📷 Screenshots
-<img src="assets/screenshot-1.png" alt="App Screenshot - Home" width="200"/>
-<img src="assets/screenshot-2.png" alt="App Screenshot - Settings" width="200"/>
-
+<div>
+<img src="assets/screenshot-1.png" alt="App Screenshot - Home"  height="600"/>
+<img src="assets/screenshot-2.png" alt="App Screenshot - Settings"   height="600"/>
+</div>
 ## 📦 Technologies Used
 - React Native
 - Expo
